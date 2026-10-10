@@ -1,0 +1,2377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SousTouch Bengali Edition — Touchless Kitchen Companion</title>
+  
+  <style>
+    :root {
+      --bg-base: #0a0d12;
+      --bg-surface: #121721;
+      --bg-surface-elevated: #1a2230;
+      --bg-surface-card: rgba(22, 29, 41, 0.85);
+      
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-medium: rgba(255, 255, 255, 0.16);
+      --border-highlight: rgba(245, 158, 11, 0.4);
+
+      /* Saffron Gold & Spice Palette */
+      --accent-saffron: #f59e0b;
+      --accent-saffron-light: #fef3c7;
+      --accent-saffron-glow: rgba(245, 158, 11, 0.35);
+      --accent-crimson: #ef4444;
+      --accent-emerald: #10b981;
+      --accent-emerald-glow: rgba(16, 185, 129, 0.3);
+      --accent-cyan: #06b6d4;
+      --accent-cyan-glow: rgba(6, 182, 212, 0.3);
+
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 22px;
+      --radius-xl: 30px;
+
+      --shadow-ambient: 0 20px 50px rgba(0, 0, 0, 0.6);
+      --shadow-glow: 0 0 35px rgba(245, 158, 11, 0.22);
+      --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "Kalpurush", "SolaimanLipi", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background-color: var(--bg-base);
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(245, 158, 11, 0.07) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(239, 68, 68, 0.06) 0%, transparent 45%);
+      color: var(--text-primary);
+      font-family: var(--font-stack);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      line-height: 1.5;
+    }
+
+    /* Glassmorphic Top Bar */
+    header {
+      background: rgba(15, 20, 29, 0.88);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 14px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 60;
+    }
+
+    .brand-cluster {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-logo-gem {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #f59e0b, #ef4444);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 4px 16px rgba(245, 158, 11, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .brand-text h1 {
+      font-size: 1.3rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(90deg, #ffffff, #fef3c7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .bengali-script-tag {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--accent-saffron);
+      letter-spacing: 0.02em;
+      opacity: 0.95;
+    }
+
+    .badge-pill {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--accent-saffron);
+      padding: 3px 8px;
+      border-radius: 20px;
+      border: 1px solid rgba(245, 158, 11, 0.35);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .recipe-select-box {
+      position: relative;
+    }
+
+    select.recipe-dropdown {
+      background: var(--bg-surface-elevated);
+      color: #fff;
+      border: 1px solid var(--border-medium);
+      padding: 9px 36px 9px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      outline: none;
+      appearance: none;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    select.recipe-dropdown:hover, select.recipe-dropdown:focus {
+      border-color: var(--accent-saffron);
+      box-shadow: 0 0 12px var(--accent-saffron-glow);
+    }
+
+    .recipe-select-box::after {
+      content: "▼";
+      font-size: 0.65rem;
+      color: var(--accent-saffron);
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+
+    .status-capsule {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.84rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      background: rgba(0, 0, 0, 0.45);
+      padding: 7px 14px;
+      border-radius: 30px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .pulsing-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--accent-saffron);
+      box-shadow: 0 0 8px var(--accent-saffron);
+      animation: pulse 1.8s infinite;
+    }
+
+    .pulsing-dot.active {
+      background: var(--accent-emerald);
+      box-shadow: 0 0 8px var(--accent-emerald);
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.85; }
+      50% { transform: scale(1.35); opacity: 1; }
+    }
+
+    .icon-action-btn {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .icon-action-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+      border-color: var(--border-medium);
+    }
+
+    /* Main Grid Layout */
+    main {
+      flex: 1;
+      max-width: 1440px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 24px;
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 28px;
+    }
+
+    @media (max-width: 1100px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Left Stage Section */
+    .stage-section {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    /* Recipe Banner Card */
+    .recipe-hero-banner {
+      background: linear-gradient(135deg, rgba(26, 34, 48, 0.95), rgba(18, 23, 33, 0.95));
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-lg);
+      padding: 22px 28px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-ambient);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 18px;
+    }
+
+    .recipe-hero-banner::before {
+      content: "";
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 160px;
+      height: 160px;
+      background: radial-gradient(circle, rgba(245, 158, 11, 0.18), transparent 70%);
+      pointer-events: none;
+    }
+
+    .banner-meta h2 {
+      font-size: 1.7rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #fff;
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .bengali-title-script {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--accent-saffron);
+    }
+
+    .banner-meta p {
+      font-size: 0.92rem;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      max-width: 650px;
+    }
+
+    .banner-pills-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .meta-tag {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: rgba(0, 0, 0, 0.35);
+      padding: 7px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .meta-tag strong {
+      color: var(--text-primary);
+    }
+
+    .drawer-trigger-btn {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(245, 158, 11, 0.08));
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      color: var(--accent-saffron-light);
+      padding: 7px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .drawer-trigger-btn:hover {
+      background: var(--accent-saffron);
+      color: #000;
+      box-shadow: 0 0 14px var(--accent-saffron-glow);
+    }
+
+    /* Overall Timeline & Progress */
+    .progress-track {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #f59e0b, #ef4444, #10b981);
+      width: 20%;
+      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .step-track-nodes {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .step-node {
+      flex: 1;
+      height: 6px;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.1);
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .step-node.completed {
+      background: var(--accent-emerald);
+      box-shadow: 0 0 8px var(--accent-emerald-glow);
+    }
+
+    .step-node.active {
+      background: var(--accent-saffron);
+      height: 8px;
+      box-shadow: 0 0 12px var(--accent-saffron-glow);
+    }
+
+    /* Master Cooking Stage Card (3-6ft Viewing Distance) */
+    .master-stage-card {
+      background: var(--bg-surface-card);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 2px solid var(--border-medium);
+      border-radius: var(--radius-xl);
+      padding: 40px;
+      box-shadow: var(--shadow-ambient);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      min-height: 520px;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+    }
+
+    .master-stage-card.air-pulse {
+      border-color: var(--accent-saffron);
+      box-shadow: var(--shadow-glow);
+      transform: scale(1.008);
+    }
+
+    .master-stage-card.narrating {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 35px var(--accent-cyan-glow);
+    }
+
+    .stage-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 20px;
+    }
+
+    .stage-step-tag {
+      font-size: 0.95rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: var(--accent-saffron);
+      color: #000;
+      padding: 6px 18px;
+      border-radius: 30px;
+      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3);
+    }
+
+    /* Interactive Countdown Timer Pill */
+    .interactive-timer-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      color: var(--accent-saffron-light);
+      padding: 8px 18px;
+      border-radius: 30px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .interactive-timer-pill:hover {
+      background: rgba(245, 158, 11, 0.25);
+      border-color: var(--accent-saffron);
+    }
+
+    .interactive-timer-pill.ticking {
+      background: var(--accent-emerald);
+      color: #000;
+      border-color: #fff;
+      box-shadow: 0 0 20px var(--accent-emerald-glow);
+      animation: timerPulse 1s infinite alternate;
+    }
+
+    @keyframes timerPulse {
+      from { transform: scale(1); }
+      to { transform: scale(1.04); }
+    }
+
+    .reading-visualizer {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      background: rgba(6, 182, 212, 0.15);
+      border: 1px solid rgba(6, 182, 212, 0.4);
+      padding: 8px 16px;
+      border-radius: 20px;
+      color: #a5f3fc;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .reading-visualizer.active {
+      display: flex;
+    }
+
+    .soundwave-bars {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      height: 18px;
+    }
+
+    .soundwave-bar {
+      width: 3px;
+      background: var(--accent-cyan);
+      border-radius: 2px;
+      animation: bounceWave 0.75s infinite alternate ease-in-out;
+    }
+
+    .soundwave-bar:nth-child(2) { animation-delay: 0.2s; height: 16px; }
+    .soundwave-bar:nth-child(3) { animation-delay: 0.4s; height: 10px; }
+    .soundwave-bar:nth-child(4) { animation-delay: 0.15s; height: 18px; }
+
+    @keyframes bounceWave {
+      from { height: 4px; }
+      to { height: 18px; }
+    }
+
+    .stage-step-title {
+      font-size: 2.1rem;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      color: #ffffff;
+      line-height: 1.25;
+    }
+
+    .stage-step-desc {
+      font-size: 1.45rem;
+      line-height: 1.75;
+      color: #f1f5f9;
+      font-weight: 400;
+    }
+
+    .stage-step-desc strong {
+      color: var(--accent-saffron);
+      font-weight: 700;
+    }
+
+    /* Required Ingredients Subcard */
+    .needed-ingredients-card {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 18px 24px;
+    }
+
+    .needed-ingredients-header {
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .ingredients-pill-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .ingredient-badge {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      padding: 8px 16px;
+      border-radius: 24px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ingredient-badge .measure {
+      color: var(--accent-saffron);
+      font-weight: 800;
+    }
+
+    /* Chef Authentic Bengali Tip */
+    .chef-heritage-tip {
+      border-left: 4px solid var(--accent-saffron);
+      background: linear-gradient(90deg, rgba(245, 158, 11, 0.12), transparent);
+      padding: 14px 20px;
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 1rem;
+      color: var(--text-secondary);
+    }
+
+    .chef-heritage-tip strong {
+      color: var(--accent-saffron);
+    }
+
+    /* Action Toolbar */
+    .stage-action-bar {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .action-nav-button {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-medium);
+      color: #ffffff;
+      padding: 20px 24px;
+      border-radius: var(--radius-md);
+      font-size: 1.15rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .action-nav-button:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: var(--accent-saffron);
+      transform: translateY(-2px);
+    }
+
+    .action-nav-button:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .air-hint-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      background: rgba(255, 255, 255, 0.08);
+      padding: 4px 9px;
+      border-radius: 12px;
+      letter-spacing: 0.02em;
+    }
+
+    .action-voice-button {
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      border: 1px solid rgba(6, 182, 212, 0.45);
+      color: #67e8f9;
+      padding: 20px 28px;
+      border-radius: var(--radius-md);
+      font-size: 1.15rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+    }
+
+    .action-voice-button:hover {
+      background: rgba(6, 182, 212, 0.2);
+      border-color: var(--accent-cyan);
+      transform: translateY(-2px);
+    }
+
+    .action-voice-button.reading {
+      background: var(--accent-cyan);
+      color: #000;
+      box-shadow: 0 0 20px var(--accent-cyan-glow);
+    }
+
+    /* Right Column: Vision HUD & Controls */
+    .hud-column {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    .vision-hud-card {
+      background: var(--bg-surface-card);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      box-shadow: var(--shadow-ambient);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .hud-title-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .hud-title-bar h3 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #fff;
+    }
+
+    .engine-chip {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 14px;
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--accent-emerald);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+    }
+
+    /* Viewport for camera & landmarks */
+    .camera-frame-box {
+      position: relative;
+      width: 100%;
+      height: 240px;
+      background: #000;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 2px solid var(--border-subtle);
+      box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
+    }
+
+    #webcamVideo {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scaleX(-1);
+    }
+
+    #landmarkCanvas {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      transform: scaleX(-1);
+      pointer-events: none;
+    }
+
+    .camera-overlay-hud {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 12px;
+    }
+
+    .gesture-readout-badge {
+      align-self: flex-start;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(8px);
+      padding: 7px 14px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid var(--border-medium);
+      transition: all 0.2s ease;
+    }
+
+    .gesture-readout-badge.active-gesture {
+      background: var(--accent-saffron);
+      color: #000;
+      border-color: #fff;
+      box-shadow: 0 0 16px var(--accent-saffron-glow);
+      transform: scale(1.05);
+    }
+
+    .cooldown-drain-track {
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .cooldown-drain-bar {
+      width: 0%;
+      height: 100%;
+      background: var(--accent-saffron);
+      transition: width 0.1s linear;
+    }
+
+    /* Gesture Legend */
+    .air-gestures-legend {
+      background: var(--bg-surface-elevated);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      border: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .legend-header-title {
+      font-size: 0.74rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+    }
+
+    .gesture-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.88rem;
+    }
+
+    .gesture-icon-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .gesture-outcome {
+      color: var(--accent-saffron);
+      font-weight: 700;
+      font-size: 0.84rem;
+    }
+
+    /* Camera controls */
+    .hud-controls-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .hud-action-btn {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-medium);
+      color: #fff;
+      padding: 12px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .hud-action-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .hud-action-btn.primary-highlight {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.25), rgba(245, 158, 11, 0.1));
+      color: var(--accent-saffron-light);
+      border-color: rgba(245, 158, 11, 0.5);
+    }
+
+    .hud-action-btn.primary-highlight:hover {
+      background: var(--accent-saffron);
+      color: #000;
+      box-shadow: 0 0 14px var(--accent-saffron-glow);
+    }
+
+    /* Simulator Sandbox Card */
+    .simulator-sandbox-card {
+      background: var(--bg-surface-card);
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .sim-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sim-banner span.title {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--text-secondary);
+    }
+
+    .sim-badge {
+      font-size: 0.68rem;
+      padding: 3px 8px;
+      border-radius: 12px;
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--accent-saffron);
+      font-weight: 700;
+    }
+
+    .sim-buttons-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .sim-touch-btn {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      color: #fff;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 0.84rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.15s;
+    }
+
+    .sim-touch-btn:hover {
+      background: rgba(255, 255, 255, 0.14);
+      border-color: var(--text-muted);
+      transform: translateY(-1px);
+    }
+
+    .sim-touch-btn:active {
+      transform: translateY(1px);
+      background: var(--accent-saffron);
+      color: #000;
+    }
+
+    .sim-keyboard-footer {
+      font-size: 0.74rem;
+      color: var(--text-dim);
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    /* Full Ingredients Drawer */
+    .drawer-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .drawer-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .drawer-slider {
+      width: 440px;
+      max-width: 90vw;
+      background: var(--bg-surface);
+      border-left: 1px solid var(--border-medium);
+      height: 100%;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      overflow-y: auto;
+      transform: translateX(100%);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .drawer-backdrop.open .drawer-slider {
+      transform: translateX(0);
+    }
+
+    .drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .drawer-close-circle {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      color: #fff;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+    }
+
+    .ingredient-checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border-subtle);
+      font-size: 0.96rem;
+      color: var(--text-secondary);
+    }
+
+    .ingredient-checklist-item input[type="checkbox"] {
+      width: 19px;
+      height: 19px;
+      margin-top: 2px;
+      accent-color: var(--accent-saffron);
+      cursor: pointer;
+    }
+
+    /* Floating Toast */
+    .hud-toast-banner {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: rgba(18, 23, 33, 0.96);
+      border: 1px solid var(--accent-saffron);
+      color: #fff;
+      padding: 14px 28px;
+      border-radius: 40px;
+      font-size: 0.96rem;
+      font-weight: 700;
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 120;
+      pointer-events: none;
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .hud-toast-banner.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    @media (max-width: 768px) {
+      header { padding: 12px 16px; }
+      main { padding: 16px; gap: 16px; }
+      .master-stage-card { padding: 24px 20px; min-height: 420px; }
+      .stage-step-title { font-size: 1.5rem; }
+      .stage-step-desc { font-size: 1.2rem; }
+      .stage-action-bar { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Glassmorphic Navigation -->
+  <header>
+    <div class="brand-cluster">
+      <div class="brand-logo-gem">🌶️</div>
+      <div class="brand-text">
+        <h1>
+          SousTouch
+          <span class="bengali-script-tag">রসুই সঙ্গী</span>
+        </h1>
+      </div>
+      <span class="badge-pill">Touchless ML</span>
+    </div>
+
+    <div class="header-actions">
+      <div class="recipe-select-box">
+        <select id="recipeSelect" class="recipe-dropdown" aria-label="Select Authentic Recipe">
+          <option value="0">Shorshe Ilish (সর্ষে ইলিশ - Mustard Hilsa)</option>
+          <option value="1">Kolkata Kosha Mangsho (কষা মাংস - Slow-Braised Mutton)</option>
+          <option value="2">Chingri Malai Curry (চিংড়ি মালাই কারি - Coconut Prawns)</option>
+          <option value="3">Shahi Bhuna Khichuri (শাহী ভুনা খিচুড়ি - Gobindobhog)</option>
+        </select>
+      </div>
+
+      <div class="status-capsule">
+        <div id="statusDot" class="pulsing-dot"></div>
+        <span id="statusText">Ready • Click Start Camera</span>
+      </div>
+
+      <button id="fullscreenToggleBtn" class="icon-action-btn" title="Toggle Kitchen Fullscreen">⛶</button>
+    </div>
+  </header>
+
+  <!-- Main Dual-Column Interactive Arena -->
+  <main>
+    <!-- Left Stage Column -->
+    <section class="stage-section">
+      <!-- Recipe Hero Banner -->
+      <div class="recipe-hero-banner">
+        <div class="banner-meta">
+          <h2 id="recipeTitleDisplay">
+            Shorshe Ilish
+            <span id="recipeBengaliTitle" class="bengali-title-script">(সর্ষে ইলিশ)</span>
+          </h2>
+          <p id="recipeDescDisplay">Steamed Padma Hilsa steaks simmered in freshly stone-ground mustard paste, virgin mustard oil, and slit green chilies.</p>
+        </div>
+        <div class="banner-pills-row">
+          <div class="meta-tag">⏱️ <strong id="recipeTimeDisplay">25 Mins</strong></div>
+          <div class="meta-tag">🔥 <strong id="recipeDifficultyDisplay">Heritage Medium</strong></div>
+          <div class="meta-tag">👥 <strong id="recipeServingsDisplay">4 Servings</strong></div>
+          <button id="openIngredientsBtn" class="drawer-trigger-btn">📋 Full Pantry List</button>
+        </div>
+      </div>
+
+      <!-- Timeline Progress Bars -->
+      <div class="progress-track">
+        <div id="progressFill" class="progress-fill"></div>
+      </div>
+      <div id="stepNodesContainer" class="step-track-nodes">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <!-- Master Cooking Stage Card -->
+      <div id="masterStageCard" class="master-stage-card">
+        <div class="stage-card-header">
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <span id="stepCounterBadge" class="stage-step-tag">STEP 1 OF 5</span>
+            <div id="interactiveTimerPill" class="interactive-timer-pill" title="Wave, Thumb-up, or click to Start/Pause step timer">
+              ⏱️ <span id="timerDigits">03:00</span>
+            </div>
+          </div>
+
+          <div id="readingVisualizer" class="reading-visualizer">
+            <div class="soundwave-bars">
+              <div class="soundwave-bar"></div>
+              <div class="soundwave-bar"></div>
+              <div class="soundwave-bar"></div>
+              <div class="soundwave-bar"></div>
+            </div>
+            <span>Reading Aloud via Web Speech...</span>
+          </div>
+        </div>
+
+        <h3 id="stepHeading" class="stage-step-title">Gently Wash & Marinate Hilsa Steaks</h3>
+
+        <p id="stepInstructionText" class="stage-step-desc">
+          Rinse fresh Hilsa steaks gently under cold water and pat dry. Season with 1 teaspoon turmeric powder, 1/2 teaspoon salt, and a light smear of pure mustard oil. Let rest for 5 minutes.
+        </p>
+
+        <!-- Needed Ingredients Subcard -->
+        <div class="needed-ingredients-card">
+          <div class="needed-ingredients-header">🛒 Needed for this step:</div>
+          <div id="stepIngredientsPills" class="ingredients-pill-wrap">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- Heritage Chef Tip Callout -->
+        <div class="chef-heritage-tip">
+          <span style="font-size: 1.3rem;">💡</span>
+          <div>
+            <strong>Heritage Bengali Tip:</strong>
+            <span id="stepTipText">Never over-wash or scrub Hilsa, as the fish's natural rich oil carries the essential delicate aroma and flavor.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stage Action Toolbar -->
+      <div class="stage-action-bar">
+        <button id="prevStepBtn" class="action-nav-button">
+          <span>👈 Previous</span>
+          <span class="air-hint-badge">Wave Left</span>
+        </button>
+
+        <button id="ttsNarrateBtn" class="action-voice-button">
+          <span id="ttsIcon">🔊</span>
+          <span id="ttsLabel">Read Aloud</span>
+          <span class="air-hint-badge" style="background: rgba(6, 182, 212, 0.2); color: #a5f3fc;">✋ Open Palm</span>
+        </button>
+
+        <button id="nextStepBtn" class="action-nav-button">
+          <span>Next 👉</span>
+          <span class="air-hint-badge">Wave Right</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Right Vision HUD & Sidebar -->
+    <aside class="hud-column">
+      <!-- Live Camera & Computer Vision HUD -->
+      <div class="vision-hud-card">
+        <div class="hud-title-bar">
+          <h3>
+            <span>📷</span>
+            Kitchen Vision HUD
+          </h3>
+          <div id="engineLabelChip" class="engine-chip">MediaPipe Tasks ML</div>
+        </div>
+
+        <!-- Video Viewport -->
+        <div class="camera-frame-box">
+          <video id="webcamVideo" autoplay playsinline muted></video>
+          <canvas id="landmarkCanvas"></canvas>
+          <div class="camera-overlay-hud">
+            <div id="gestureReadout" class="gesture-readout-badge">
+              <span>🖐️</span>
+              <span id="gestureText">Awaiting Hand...</span>
+            </div>
+            <div class="cooldown-drain-track">
+              <div id="cooldownBar" class="cooldown-drain-bar"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Air Gestures Cheat Sheet -->
+        <div class="air-gestures-legend">
+          <div class="legend-header-title">Touchless Air Gestures</div>
+          
+          <div class="gesture-row">
+            <div class="gesture-icon-label">
+              <span>👉</span>
+              <span>Wave Right / Thumb Right</span>
+            </div>
+            <span class="gesture-outcome">Next Step</span>
+          </div>
+
+          <div class="gesture-row">
+            <div class="gesture-icon-label">
+              <span>👈</span>
+              <span>Wave Left</span>
+            </div>
+            <span class="gesture-outcome">Prev Step</span>
+          </div>
+
+          <div class="gesture-row">
+            <div class="gesture-icon-label">
+              <span>✋</span>
+              <span>Open Palm (Hold 0.4s)</span>
+            </div>
+            <span class="gesture-outcome">Read Aloud / Pause</span>
+          </div>
+
+          <div class="gesture-row">
+            <div class="gesture-icon-label">
+              <span>👍</span>
+              <span>Thumbs Up</span>
+            </div>
+            <span class="gesture-outcome">Start / Pause Timer</span>
+          </div>
+        </div>
+
+        <!-- Camera HUD Controls -->
+        <div class="hud-controls-grid">
+          <button id="toggleCameraBtn" class="hud-action-btn primary-highlight">
+            <span>📷</span>
+            <span id="camBtnLabel">Start Camera</span>
+          </button>
+          <button id="soundFxBtn" class="hud-action-btn">
+            <span>🔔</span>
+            <span id="soundFxLabel">Sound FX: ON</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Simulator Box -->
+      <div class="simulator-sandbox-card">
+        <div class="sim-banner">
+          <span class="title">🧪 Air Gesture Simulator</span>
+          <span class="sim-badge">Zero Camera Needed</span>
+        </div>
+        <div class="sim-buttons-grid">
+          <button class="sim-touch-btn" onclick="triggerGestureSim('right')">👉 Wave Right</button>
+          <button class="sim-touch-btn" onclick="triggerGestureSim('left')">👈 Wave Left</button>
+          <button class="sim-touch-btn" onclick="triggerGestureSim('palm')">✋ Open Palm</button>
+          <button class="sim-touch-btn" onclick="triggerGestureSim('thumbsup')">👍 Thumbs Up</button>
+        </div>
+        <div class="sim-keyboard-footer">
+          Keyboard Shortcuts: Arrow Right (Next) • Arrow Left (Prev) • Spacebar (Read) • 'T' (Timer) • 'F' (Fullscreen)
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- Ingredients Drawer Overlay -->
+  <div id="drawerOverlay" class="drawer-backdrop">
+    <div class="drawer-slider">
+      <div class="drawer-header">
+        <h2 style="font-size: 1.3rem;">📋 Full Pantry Ingredients</h2>
+        <button id="closeDrawerBtn" class="drawer-close-circle">✕</button>
+      </div>
+      <p style="font-size: 0.86rem; color: var(--text-muted);">
+        Check off spices and pantry staples before cooking with messy hands:
+      </p>
+      <div id="fullIngredientsContainer" style="display: flex; flex-direction: column;">
+        <!-- Injected dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toastNotification" class="hud-toast-banner">
+    <span id="toastIcon">👋</span>
+    <span id="toastText">Gesture Recognized</span>
+  </div>
+
+  <!-- Audio Synthesizer Engine (Web Audio API) -->
+  <script>
+    class WebAudioFXEngine {
+      constructor() {
+        this.ctx = null;
+        this.enabled = true;
+      }
+
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) this.ctx = new AudioContext();
+        }
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      }
+
+      playNextTone() {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+        const t = this.ctx.currentTime;
+        this.synth(659.25, t, 0.12, 'sine');       // E5
+        this.synth(987.77, t + 0.08, 0.18, 'sine'); // B5
+      }
+
+      playPrevTone() {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+        const t = this.ctx.currentTime;
+        this.synth(987.77, t, 0.12, 'sine');       // B5
+        this.synth(659.25, t + 0.08, 0.18, 'sine'); // E5
+      }
+
+      playPalmChord() {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+        const t = this.ctx.currentTime;
+        this.synth(523.25, t, 0.28, 'triangle', 0.16); // C5
+        this.synth(659.25, t + 0.04, 0.28, 'triangle', 0.13); // E5
+        this.synth(783.99, t + 0.08, 0.35, 'triangle', 0.11); // G5
+      }
+
+      playTimerAlarm() {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+        const t = this.ctx.currentTime;
+        for (let i = 0; i < 3; i++) {
+          this.synth(880, t + (i * 0.18), 0.14, 'sine', 0.22);
+        }
+      }
+
+      synth(freq, startTime, duration, type = 'sine', maxGain = 0.16) {
+        try {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, startTime);
+          gain.gain.setValueAtTime(0, startTime);
+          gain.gain.linearRampToValueAtTime(maxGain, startTime + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(startTime);
+          osc.stop(startTime + duration);
+        } catch (e) {}
+      }
+    }
+
+    const soundFX = new WebAudioFXEngine();
+  </script>
+
+  <!-- Authentic Bengali Recipe Library -->
+  <script>
+    const BENGALI_RECIPES = [
+      {
+        id: "shorshe-ilish",
+        title: "Shorshe Ilish",
+        bengaliTitle: "(সর্ষে ইলিশ)",
+        desc: "Steamed Padma Hilsa steaks gently simmered in stone-ground yellow mustard paste, virgin mustard oil, and slit fiery green chilies.",
+        time: "25 Mins",
+        difficulty: "Heritage Classic",
+        servings: "4 Servings",
+        allIngredients: [
+          "4 large fresh Hilsa (Ilish) steaks (washed gently)",
+          "2.5 tbsp Yellow Mustard Seeds & 1 tbsp Black Mustard Seeds (soaked & paste-ground with 1 green chili & salt)",
+          "1 tsp Turmeric Powder (হলুদ গুঁড়া)",
+          "1 tsp Kashmiri Red Chili Powder",
+          "1/2 tsp Kalo Jeere / Nigella Seeds (কালো জিরে)",
+          "6-8 Fresh Green Chilies (কাঁচা লঙ্কা, slit lengthwise)",
+          "4 tbsp Pure Virgin Mustard Oil (ঝাঁজালো সরিষার তেল)",
+          "Salt to taste",
+          "1 cup Warm Water"
+        ],
+        steps: [
+          {
+            title: "Marinate Hilsa Steaks Gently",
+            instruction: "Pat dry Hilsa steaks gently. Rub with 1 teaspoon turmeric powder, half a teaspoon salt, and 1 teaspoon of raw mustard oil. Set aside for 5 minutes.",
+            timerSec: 180,
+            ingredients: [
+              { name: "Hilsa Steaks", amount: "4 pcs" },
+              { name: "Turmeric Powder", amount: "1 tsp" },
+              { name: "Mustard Oil", amount: "1 tsp" }
+            ],
+            tip: "Never over-wash or scrub Hilsa, as the fish's natural oil carries the prized flavor."
+          },
+          {
+            title: "Prepare Fresh Mustard Gravy",
+            instruction: "In a bowl, mix the ground mustard paste with 1 cup of warm water, 1/2 teaspoon turmeric, red chili powder, and salt. Strain through a fine sieve if you prefer a silky, non-bitter gravy.",
+            timerSec: 120,
+            ingredients: [
+              { name: "Ground Mustard Paste", amount: "3 tbsp" },
+              { name: "Warm Water", amount: "1 cup" },
+              { name: "Turmeric & Chili Powder", amount: "1/2 tsp each" }
+            ],
+            tip: "Grinding mustard seeds with a green chili and a pinch of salt neutralizes bitterness completely."
+          },
+          {
+            title: "Temper Nigella Seeds & Green Chilies",
+            instruction: "Heat 2.5 tablespoons of pungent mustard oil in a wide pan until lightly smoking. Lower heat and add kalo jeere (nigella seeds) and 4 slit green chilies. Fry for 20 seconds until aromatic.",
+            timerSec: 60,
+            ingredients: [
+              { name: "Mustard Oil", amount: "2.5 tbsp" },
+              { name: "Kalo Jeere (Nigella)", amount: "1/2 tsp" },
+              { name: "Slit Green Chilies", amount: "4 pcs" }
+            ],
+            tip: "Smoking the mustard oil mellows the harshness while locking in the signature pungent aroma."
+          },
+          {
+            title: "Gently Simmer Hilsa in Mustard Sauce",
+            instruction: "Pour the mustard mixture into the pan and bring to a boil. Gently slide in the marinated Hilsa steaks in a single layer. Cover and simmer on medium-low heat for 6 to 8 minutes.",
+            timerSec: 420,
+            ingredients: [
+              { name: "Mustard Gravy Base", amount: "All" },
+              { name: "Marinated Hilsa Steaks", amount: "All" }
+            ],
+            tip: "Do not flip the steaks roughly with a ladle; Hilsa meat is delicate and cooks quickly through steaming."
+          },
+          {
+            title: "Finish with Raw Mustard Oil & Rest",
+            instruction: "Uncover, add remaining slit green chilies, and drizzle 1 tablespoon of raw virgin mustard oil on top. Turn off heat, cover, and rest for 3 minutes before serving with piping hot steamed rice.",
+            timerSec: 180,
+            ingredients: [
+              { name: "Raw Mustard Oil", amount: "1 tbsp" },
+              { name: "Fresh Slit Chilies", amount: "3-4 pcs" }
+            ],
+            tip: "The final drizzle of raw mustard oil provides that authentic Bengali 'jhaanjh' (pungent kick)."
+          }
+        ]
+      },
+      {
+        id: "kosha-mangsho",
+        title: "Kolkata Kosha Mangsho",
+        bengaliTitle: "(কষা মাংস)",
+        desc: "Velvety, dark slow-braised mutton curry rich with caramelized onions, whole garam masala, ginger-garlic paste, and mustard oil.",
+        time: "60 Mins",
+        difficulty: "Heritage Advanced",
+        servings: "5 Servings",
+        allIngredients: [
+          "1 kg Fresh Mutton / Goat Meat (curry cut)",
+          "1/2 cup Hung Curd / Yogurt (টক দই)",
+          "4 large Onions (finely sliced)",
+          "2.5 tbsp Ginger-Garlic Paste",
+          "5 tbsp Mustard Oil",
+          "Whole Garam Masala (cardamoms, cloves, cinnamon stick, bay leaves)",
+          "1.5 tsp Turmeric & 1.5 tsp Kashmiri Red Chili Powder",
+          "1 tsp Bengali Garam Masala Powder",
+          "1 tsp Sugar (for caramelization)",
+          "Salt to taste"
+        ],
+        steps: [
+          {
+            title: "Marinate Mutton in Spiced Yogurt",
+            instruction: "In a large bowl, marinate mutton with whisked curd, 1 tablespoon mustard oil, 1 tablespoon ginger-garlic paste, turmeric, and Kashmiri red chili powder. Let rest for at least 30 minutes.",
+            timerSec: 600,
+            ingredients: [
+              { name: "Mutton Pieces", amount: "1 kg" },
+              { name: "Curd / Yogurt", amount: "1/2 cup" },
+              { name: "Ginger-Garlic Paste", amount: "1 tbsp" }
+            ],
+            tip: "Yogurt's lactic acid tenderizes the goat meat fibers, guaranteeing a melt-in-the-mouth texture."
+          },
+          {
+            title: "Caramelize Sugar & Temper Aromatics",
+            instruction: "Heat 4 tablespoons mustard oil in a heavy-bottomed kadai. Add 1 teaspoon sugar and let it melt into dark golden caramel. Immediately toss in bay leaves and whole garam masala.",
+            timerSec: 90,
+            ingredients: [
+              { name: "Mustard Oil", amount: "4 tbsp" },
+              { name: "Sugar", amount: "1 tsp" },
+              { name: "Whole Garam Masala", amount: "4 pods, 1 stick" }
+            ],
+            tip: "Caramelizing sugar in hot oil gives Kosha Mangsho its signature glistening deep dark mahogany color."
+          },
+          {
+            title: "Brown Onions & Sauté Paste (Bhuna)",
+            instruction: "Add sliced onions and fry over medium heat until deep brown and caramelized. Add remaining ginger-garlic paste and sauté for 3 minutes until oil separates.",
+            timerSec: 480,
+            ingredients: [
+              { name: "Sliced Onions", amount: "4 large" },
+              { name: "Ginger-Garlic Paste", amount: "1.5 tbsp" }
+            ],
+            tip: "Patience is key: don't rush the onions. Dark browning builds the intense savory gravy foundation."
+          },
+          {
+            title: "Slow Roast the Mutton (The 'Kosha' Phase)",
+            instruction: "Add marinated mutton pieces to the kadai. Sauté and roast on medium-high heat continuously for 18 to 20 minutes without water until moisture evaporates and rich dark fond clings to the pan.",
+            timerSec: 1080,
+            ingredients: [
+              { name: "Marinated Mutton", amount: "All" }
+            ],
+            tip: "Continuous stirring ('koshano') coats every single meat fiber in concentrated caramelized aromatics."
+          },
+          {
+            title: "Simmer Tender & Finish with Garam Masala",
+            instruction: "Pour in 1.5 cups of boiling water. Cover tightly and cook on low heat for 35 to 40 minutes (or pressure cook for 4 whistles). Finish with 1 tsp Bengali Garam Masala powder and 1 tsp ghee.",
+            timerSec: 1800,
+            ingredients: [
+              { name: "Boiling Water", amount: "1.5 cups" },
+              { name: "Bengali Garam Masala", amount: "1 tsp" },
+              { name: "Ghee", amount: "1 tsp" }
+            ],
+            tip: "Serve with warm luchi, parota, or basanti pulao for the quintessential Bengali feast."
+          }
+        ]
+      },
+      {
+        id: "chingri-malai",
+        title: "Chingri Malai Curry",
+        bengaliTitle: "(চিংড়ি মালাই কারি)",
+        desc: "Jumbo Golda/Bagda tiger prawns gently poached in rich coconut milk infused with green cardamom, cloves, and ginger.",
+        time: "30 Mins",
+        difficulty: "Heritage Classic",
+        servings: "4 Servings",
+        allIngredients: [
+          "500g Jumbo Tiger Prawns (Golda/Bagda Chingri, deveined with head attached)",
+          "1.5 cups Thick Fresh Coconut Milk",
+          "1 medium Onion (pureed)",
+          "1 tbsp Ginger Paste",
+          "3 tbsp Ghee & Mustard Oil blend",
+          "Whole Spices: 3 Green Cardamoms, 3 Cloves, 1 inch Cinnamon",
+          "1/2 tsp Turmeric & Kashmiri Red Chili Powder",
+          "1/2 tsp Sugar & Salt to taste",
+          "4 Slit Green Chilies"
+        ],
+        steps: [
+          {
+            title: "Clean & Lightly Sear Prawns",
+            instruction: "Devein prawns, keeping heads intact for flavor. Rub with turmeric and salt. Heat 2 tbsp oil-ghee blend and sear prawns for just 45 seconds per side until lightly golden pink. Set aside immediately.",
+            timerSec: 90,
+            ingredients: [
+              { name: "Jumbo Prawns", amount: "500g" },
+              { name: "Turmeric & Salt", amount: "1/2 tsp each" }
+            ],
+            tip: "Never overcook prawns in the sear; overcooked prawns become rubbery quickly."
+          },
+          {
+            title: "Temper Fragrant Whole Spices",
+            instruction: "In the same pan, add whole cardamoms, cinnamon, and cloves. Add pureed onion and fry on medium heat until fragrant and pale golden.",
+            timerSec: 180,
+            ingredients: [
+              { name: "Cardamoms & Cinnamon", amount: "3 pods, 1 stick" },
+              { name: "Pureed Onion", amount: "1 medium" }
+            ],
+            tip: "Cracking the cardamom pods releases essential aromatic oils directly into the fat."
+          },
+          {
+            title: "Build the Coconut Milk Gravy",
+            instruction: "Stir in ginger paste, turmeric, chili powder, and sugar. Pour in half the coconut milk and simmer for 3 minutes until oil droplets glisten on the surface.",
+            timerSec: 180,
+            ingredients: [
+              { name: "Ginger Paste", amount: "1 tbsp" },
+              { name: "Coconut Milk (Part 1)", amount: "3/4 cup" }
+            ],
+            tip: "A gentle touch of sugar is authentic Bengali tradition, balancing the coconut milk's richness."
+          },
+          {
+            title: "Simmer Prawns in Thick Cream",
+            instruction: "Pour in remaining thick coconut milk and slide seared prawns into the sauce. Add slit green chilies. Simmer gently on low heat for 5 to 6 minutes.",
+            timerSec: 360,
+            ingredients: [
+              { name: "Remaining Coconut Milk", amount: "3/4 cup" },
+              { name: "Slit Green Chilies", amount: "4 pcs" }
+            ],
+            tip: "Keep the flame on gentle simmer to prevent the coconut milk cream from splitting."
+          },
+          {
+            title: "Drizzle Pure Ghee & Serve",
+            instruction: "Drizzle 1 teaspoon of pure ghee over the top. Turn off the heat and let the curry rest for 2 minutes to thicken into a silky, luxurious gravy.",
+            timerSec: 120,
+            ingredients: [
+              { name: "Pure Ghee", amount: "1 tsp" }
+            ],
+            tip: "Pairs impeccably with Gobindobhog rice or Basanti Pulao."
+          }
+        ]
+      },
+      {
+        id: "bhuna-khichuri",
+        title: "Shahi Bhuna Khichuri",
+        bengaliTitle: "(শাহী ভুনা খিচুড়ি)",
+        desc: "Fragrant Gobindobhog short-grain rice and roasted yellow moong dal slow-cooked in ghee with whole spices, ginger, and green chilies.",
+        time: "35 Mins",
+        difficulty: "Heritage Comfort",
+        servings: "4 Servings",
+        allIngredients: [
+          "1 cup Gobindobhog Rice (fragrant short grain)",
+          "1 cup Yellow Moong Dal (সোনা মুগ ডাল)",
+          "3 tbsp Pure Desi Ghee",
+          "2 tbsp Mustard Oil",
+          "1.5 tbsp Ginger Paste",
+          "Whole Garam Masala & 2 Bay Leaves",
+          "1 tsp Cumin Seeds (গোটা জিরে)",
+          "1 tsp Turmeric Powder & 1 tsp Cumin Powder",
+          "4 cups Warm Water",
+          "Fried Potato Halves & Green Peas (optional garnish)"
+        ],
+        steps: [
+          {
+            title: "Dry Roast Moong Dal to Aromatic Gold",
+            instruction: "Dry roast yellow moong dal in a heavy pan on low heat until it turns light golden and releases an intoxicating nutty aroma. Rinse and drain immediately.",
+            timerSec: 240,
+            ingredients: [
+              { name: "Yellow Moong Dal", amount: "1 cup" }
+            ],
+            tip: "Roasting moong dal prevents the khichuri from turning mushy and imparts the signature nutty taste."
+          },
+          {
+            title: "Rinse Rice & Temper Spices in Ghee",
+            instruction: "Wash Gobindobhog rice and drain thoroughly. In a heavy pot, heat ghee and mustard oil. Add bay leaves, cumin seeds, cardamoms, and cinnamon. Sauté until fragrant.",
+            timerSec: 90,
+            ingredients: [
+              { name: "Desi Ghee & Oil", amount: "3 tbsp" },
+              { name: "Cumin & Bay Leaves", amount: "1 tsp, 2 leaves" }
+            ],
+            tip: "Gobindobhog rice has a natural jasmine-like aroma that perfumes the entire home when bloomed in ghee."
+          },
+          {
+            title: "Bhuna the Rice, Dal & Ginger",
+            instruction: "Add ginger paste, turmeric, and cumin powder. Add drained rice and roasted dal. Sauté ('bhuna') on medium heat for 4 minutes until grains are translucent and glistening.",
+            timerSec: 240,
+            ingredients: [
+              { name: "Gobindobhog Rice", amount: "1 cup" },
+              { name: "Roasted Dal", amount: "1 cup" },
+              { name: "Ginger Paste", amount: "1.5 tbsp" }
+            ],
+            tip: "Sautéing the rice and lentils in ghee seals each grain so they remain distinct after cooking."
+          },
+          {
+            title: "Simmer in Boiling Water on Low Flame",
+            instruction: "Pour 4 cups of boiling water, add salt, and slit green chilies. Bring to a rapid rolling boil, then lower flame to minimum, cover tightly, and simmer undisturbed for 12 minutes.",
+            timerSec: 720,
+            ingredients: [
+              { name: "Boiling Water", amount: "4 cups" },
+              { name: "Slit Green Chilies", amount: "4 pcs" }
+            ],
+            tip: "Use exactly a 1:2 ratio of grain to hot water for fluffy, non-sticky Bhuna Khichuri."
+          },
+          {
+            title: "Rest with Ghee & Crispy Fried Beguni",
+            instruction: "Turn off heat. Drizzle a final tablespoon of ghee and a pinch of sugar. Keep covered for 5 minutes of steam-rest. Fluff gently with a fork and serve with fried Beguni or Ilish Bhaja!",
+            timerSec: 300,
+            ingredients: [
+              { name: "Desi Ghee", amount: "1 tbsp" },
+              { name: "Pinch of Sugar", amount: "1/4 tsp" }
+            ],
+            tip: "The 5-minute covered rest allows residual steam to finish cooking the grains to tender perfection."
+          }
+        ]
+      }
+    ];
+  </script>
+
+  <!-- Application Controller & Gesture ML -->
+  <script>
+    // State Variables
+    let activeRecipeIndex = 0;
+    let activeStepIndex = 0;
+    let isNarrating = false;
+    let timerRunning = false;
+    let timerSecondsLeft = 0;
+    let timerTickInterval = null;
+
+    // Vision Engine Variables
+    let isCameraActive = false;
+    let webcamMediaStream = null;
+    let mediaPipeInstance = null;
+    let cameraUtility = null;
+    let gestureCooldownLock = false;
+    let cooldownTimeout = null;
+    let handCentroidBuffer = [];
+    let palmHoldTimerStart = null;
+
+    // DOM References
+    const recipeSelect = document.getElementById('recipeSelect');
+    const recipeTitleDisplay = document.getElementById('recipeTitleDisplay');
+    const recipeBengaliTitle = document.getElementById('recipeBengaliTitle');
+    const recipeDescDisplay = document.getElementById('recipeDescDisplay');
+    const recipeTimeDisplay = document.getElementById('recipeTimeDisplay');
+    const recipeDifficultyDisplay = document.getElementById('recipeDifficultyDisplay');
+    const recipeServingsDisplay = document.getElementById('recipeServingsDisplay');
+    const progressFill = document.getElementById('progressFill');
+    const stepNodesContainer = document.getElementById('stepNodesContainer');
+
+    const masterStageCard = document.getElementById('masterStageCard');
+    const stepCounterBadge = document.getElementById('stepCounterBadge');
+    const stepHeading = document.getElementById('stepHeading');
+    const stepInstructionText = document.getElementById('stepInstructionText');
+    const stepIngredientsPills = document.getElementById('stepIngredientsPills');
+    const stepTipText = document.getElementById('stepTipText');
+    const interactiveTimerPill = document.getElementById('interactiveTimerPill');
+    const timerDigits = document.getElementById('timerDigits');
+    const readingVisualizer = document.getElementById('readingVisualizer');
+
+    const prevStepBtn = document.getElementById('prevStepBtn');
+    const nextStepBtn = document.getElementById('nextStepBtn');
+    const ttsNarrateBtn = document.getElementById('ttsNarrateBtn');
+    const ttsLabel = document.getElementById('ttsLabel');
+    const ttsIcon = document.getElementById('ttsIcon');
+
+    const webcamVideo = document.getElementById('webcamVideo');
+    const landmarkCanvas = document.getElementById('landmarkCanvas');
+    const landmarkCtx = landmarkCanvas.getContext('2d');
+    const gestureReadout = document.getElementById('gestureReadout');
+    const gestureText = document.getElementById('gestureText');
+    const cooldownBar = document.getElementById('cooldownBar');
+    const toggleCameraBtn = document.getElementById('toggleCameraBtn');
+    const camBtnLabel = document.getElementById('camBtnLabel');
+    const statusDot = document.getElementById('statusDot');
+    const statusText = document.getElementById('statusText');
+    const engineLabelChip = document.getElementById('engineLabelChip');
+    const soundFxBtn = document.getElementById('soundFxBtn');
+    const soundFxLabel = document.getElementById('soundFxLabel');
+    const fullscreenToggleBtn = document.getElementById('fullscreenToggleBtn');
+
+    const toastNotification = document.getElementById('toastNotification');
+    const toastIcon = document.getElementById('toastIcon');
+    const toastText = document.getElementById('toastText');
+
+    const openIngredientsBtn = document.getElementById('openIngredientsBtn');
+    const drawerOverlay = document.getElementById('drawerOverlay');
+    const closeDrawerBtn = document.getElementById('closeDrawerBtn');
+    const fullIngredientsContainer = document.getElementById('fullIngredientsContainer');
+
+    // Toast HUD Helper
+    function triggerToast(icon, message) {
+      toastIcon.textContent = icon;
+      toastText.textContent = message;
+      toastNotification.classList.add('show');
+      setTimeout(() => {
+        toastNotification.classList.remove('show');
+      }, 2300);
+    }
+
+    // Sound FX Toggle
+    soundFxBtn.addEventListener('click', () => {
+      soundFX.enabled = !soundFX.enabled;
+      soundFxLabel.textContent = `Sound FX: ${soundFX.enabled ? 'ON' : 'OFF'}`;
+      triggerToast(soundFX.enabled ? '🔔' : '🔕', `Sound FX ${soundFX.enabled ? 'Enabled' : 'Muted'}`);
+    });
+
+    // Fullscreen Toggle
+    fullscreenToggleBtn.addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen().catch(() => {});
+      }
+    });
+
+    // Load Recipe View
+    function switchRecipe(index) {
+      activeRecipeIndex = index;
+      activeStepIndex = 0;
+      const recipe = BENGALI_RECIPES[activeRecipeIndex];
+
+      recipeTitleDisplay.childNodes[0].nodeValue = recipe.title + " ";
+      recipeBengaliTitle.textContent = recipe.bengaliTitle;
+      recipeDescDisplay.textContent = recipe.desc;
+      recipeTimeDisplay.textContent = recipe.time;
+      recipeDifficultyDisplay.textContent = recipe.difficulty;
+      recipeServingsDisplay.textContent = recipe.servings;
+
+      // Populate full pantry drawer
+      fullIngredientsContainer.innerHTML = '';
+      recipe.allIngredients.forEach((item, idx) => {
+        const row = document.createElement('label');
+        row.className = 'ingredient-checklist-item';
+        row.innerHTML = `
+          <input type="checkbox" id="pantry_${idx}">
+          <span>${item}</span>
+        `;
+        fullIngredientsContainer.appendChild(row);
+      });
+
+      renderActiveStep(0);
+    }
+
+    function renderActiveStep(stepIdx) {
+      const recipe = BENGALI_RECIPES[activeRecipeIndex];
+      activeStepIndex = Math.max(0, Math.min(stepIdx, recipe.steps.length - 1));
+      const step = recipe.steps[activeStepIndex];
+
+      stepCounterBadge.textContent = `STEP ${activeStepIndex + 1} OF ${recipe.steps.length}`;
+      stepHeading.textContent = step.title;
+      stepInstructionText.textContent = step.instruction;
+      stepTipText.textContent = step.tip;
+
+      // Update Ingredients Pills
+      stepIngredientsPills.innerHTML = '';
+      if (step.ingredients && step.ingredients.length > 0) {
+        step.ingredients.forEach(item => {
+          const pill = document.createElement('div');
+          pill.className = 'ingredient-badge';
+          pill.innerHTML = `<span class="measure">${item.amount}</span> <span>${item.name}</span>`;
+          stepIngredientsPills.appendChild(pill);
+        });
+      } else {
+        stepIngredientsPills.innerHTML = '<span style="color:var(--text-dim);font-size:0.85rem;">No additional ingredients for this phase.</span>';
+      }
+
+      // Prev / Next button states
+      prevStepBtn.disabled = (activeStepIndex === 0);
+      nextStepBtn.disabled = (activeStepIndex === recipe.steps.length - 1);
+
+      // Update progress fill & step nodes
+      const percent = ((activeStepIndex + 1) / recipe.steps.length) * 100;
+      progressFill.style.width = `${percent}%`;
+
+      stepNodesContainer.innerHTML = '';
+      recipe.steps.forEach((_, i) => {
+        const node = document.createElement('div');
+        node.className = 'step-node';
+        if (i < activeStepIndex) node.classList.add('completed');
+        if (i === activeStepIndex) node.classList.add('active');
+        node.onclick = () => {
+          renderActiveStep(i);
+          soundFX.playNextTone();
+        };
+        stepNodesContainer.appendChild(node);
+      });
+
+      // Reset step timer
+      resetStepTimer(step.timerSec || 180);
+
+      // Micro-animation pulse
+      masterStageCard.classList.remove('air-pulse');
+      void masterStageCard.offsetWidth;
+      masterStageCard.classList.add('air-pulse');
+      setTimeout(() => masterStageCard.classList.remove('air-pulse'), 400);
+
+      // Auto read if speech was active
+      if (isNarrating) {
+        speakStepNarration();
+      }
+    }
+
+    // Step Navigation
+    function stepForward() {
+      const recipe = BENGALI_RECIPES[activeRecipeIndex];
+      if (activeStepIndex < recipe.steps.length - 1) {
+        soundFX.playNextTone();
+        renderActiveStep(activeStepIndex + 1);
+        triggerToast('👉', `Next: ${recipe.steps[activeStepIndex].title}`);
+      } else {
+        triggerToast('🎉', 'Shundor! Recipe Complete!');
+      }
+    }
+
+    function stepBackward() {
+      if (activeStepIndex > 0) {
+        soundFX.playPrevTone();
+        renderActiveStep(activeStepIndex - 1);
+        triggerToast('👈', `Previous: ${BENGALI_RECIPES[activeRecipeIndex].steps[activeStepIndex].title}`);
+      }
+    }
+
+    prevStepBtn.addEventListener('click', stepBackward);
+    nextStepBtn.addEventListener('click', stepForward);
+
+    recipeSelect.addEventListener('change', (e) => {
+      switchRecipe(parseInt(e.target.value, 10));
+    });
+
+    // Drawer modal controls
+    openIngredientsBtn.addEventListener('click', () => drawerOverlay.classList.add('open'));
+    closeDrawerBtn.addEventListener('click', () => drawerOverlay.classList.remove('open'));
+    drawerOverlay.addEventListener('click', (e) => {
+      if (e.target === drawerOverlay) drawerOverlay.classList.remove('open');
+    });
+
+    // Step Countdown Timer
+    function formatClock(seconds) {
+      const m = Math.floor(seconds / 60);
+      const s = seconds % 60;
+      return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+    }
+
+    function resetStepTimer(sec) {
+      clearInterval(timerTickInterval);
+      timerRunning = false;
+      timerSecondsLeft = sec;
+      timerDigits.textContent = formatClock(timerSecondsLeft);
+      interactiveTimerPill.classList.remove('ticking');
+    }
+
+    function toggleStepTimer() {
+      if (timerRunning) {
+        clearInterval(timerTickInterval);
+        timerRunning = false;
+        interactiveTimerPill.classList.remove('ticking');
+        triggerToast('⏸️', 'Kitchen Timer Paused');
+      } else {
+        if (timerSecondsLeft <= 0) return;
+        timerRunning = true;
+        interactiveTimerPill.classList.add('ticking');
+        soundFX.init();
+        triggerToast('⏱️', 'Kitchen Timer Started');
+        timerTickInterval = setInterval(() => {
+          timerSecondsLeft--;
+          timerDigits.textContent = formatClock(timerSecondsLeft);
+          if (timerSecondsLeft <= 0) {
+            clearInterval(timerTickInterval);
+            timerRunning = false;
+            interactiveTimerPill.classList.remove('ticking');
+            soundFX.playTimerAlarm();
+            triggerToast('🔔', 'Step Timer Complete! Ready for next step.');
+            if ('vibrate' in navigator) navigator.vibrate([200, 100, 200]);
+          }
+        }, 1000);
+      }
+    }
+
+    interactiveTimerPill.addEventListener('click', toggleStepTimer);
+
+    // Web Speech API (Text-to-Speech)
+    function speakStepNarration() {
+      if (!('speechSynthesis' in window)) {
+        triggerToast('⚠️', 'Speech synthesis is not supported on this device.');
+        return;
+      }
+
+      window.speechSynthesis.cancel();
+      const step = BENGALI_RECIPES[activeRecipeIndex].steps[activeStepIndex];
+      const spokenContent = `Step ${activeStepIndex + 1}: ${step.title}. ${step.instruction}`;
+
+      const utterance = new SpeechSynthesisUtterance(spokenContent);
+      utterance.rate = 1.0;
+      utterance.pitch = 1.0;
+
+      try {
+        const voices = window.speechSynthesis.getVoices();
+        const preferred = voices.find(v => v.lang && v.lang.startsWith('en') && (v.name.includes('Natural') || v.name.includes('Google') || v.name.includes('Samantha')));
+        if (preferred) utterance.voice = preferred;
+      } catch (e) {}
+
+      utterance.onstart = () => {
+        isNarrating = true;
+        readingVisualizer.classList.add('active');
+        masterStageCard.classList.add('narrating');
+        ttsNarrateBtn.classList.add('reading');
+        ttsLabel.textContent = 'Pause Reading';
+        ttsIcon.textContent = '⏸️';
+      };
+
+      utterance.onend = utterance.onerror = () => {
+        isNarrating = false;
+        readingVisualizer.classList.remove('active');
+        masterStageCard.classList.remove('narrating');
+        ttsNarrateBtn.classList.remove('reading');
+        ttsLabel.textContent = 'Read Aloud';
+        ttsIcon.textContent = '🔊';
+      };
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function toggleNarration() {
+      soundFX.playPalmChord();
+      if (isNarrating) {
+        window.speechSynthesis.cancel();
+        isNarrating = false;
+        readingVisualizer.classList.remove('active');
+        masterStageCard.classList.remove('narrating');
+        ttsNarrateBtn.classList.remove('reading');
+        ttsLabel.textContent = 'Read Aloud';
+        ttsIcon.textContent = '🔊';
+        triggerToast('✋', 'Speech Paused');
+      } else {
+        speakStepNarration();
+        triggerToast('🔊', 'Reading Instructions Aloud');
+      }
+    }
+
+    ttsNarrateBtn.addEventListener('click', toggleNarration);
+
+    // Cooldown Debouncer
+    function executeTouchlessAction(type, feedbackLabel) {
+      if (gestureCooldownLock) return;
+      gestureCooldownLock = true;
+
+      cooldownBar.style.width = '100%';
+      cooldownBar.style.transition = 'width 0s';
+      requestAnimationFrame(() => {
+        cooldownBar.style.transition = 'width 1.25s linear';
+        cooldownBar.style.width = '0%';
+      });
+
+      gestureReadout.classList.add('active-gesture');
+      gestureText.textContent = feedbackLabel;
+
+      if (type === 'right') {
+        stepForward();
+      } else if (type === 'left') {
+        stepBackward();
+      } else if (type === 'palm') {
+        toggleNarration();
+      } else if (type === 'thumbsup') {
+        toggleStepTimer();
+      }
+
+      clearTimeout(cooldownTimeout);
+      cooldownTimeout = setTimeout(() => {
+        gestureCooldownLock = false;
+        gestureReadout.classList.remove('active-gesture');
+        gestureText.textContent = 'Tracking Hand 🖐️';
+      }, 1250);
+    }
+
+    // Simulator Trigger
+    window.triggerGestureSim = function(type) {
+      if (type === 'right') executeTouchlessAction('right', '👋 SWIPE RIGHT -> NEXT');
+      else if (type === 'left') executeTouchlessAction('left', '👈 SWIPE LEFT -> PREV');
+      else if (type === 'palm') executeTouchlessAction('palm', '✋ OPEN PALM -> READ/PAUSE');
+      else if (type === 'thumbsup') executeTouchlessAction('thumbsup', '👍 THUMBS UP -> TIMER');
+    };
+
+    // Keyboard Shortcuts
+    window.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
+      if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        executeTouchlessAction('right', '⌨️ Key Right -> NEXT');
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        executeTouchlessAction('left', '⌨️ Key Left -> PREV');
+      } else if (e.key === ' ' || e.code === 'Space') {
+        e.preventDefault();
+        executeTouchlessAction('palm', '⌨️ Spacebar -> READ/PAUSE');
+      } else if (e.key === 't' || e.key === 'T') {
+        e.preventDefault();
+        executeTouchlessAction('thumbsup', '⌨️ Key T -> TIMER');
+      } else if (e.key === 'f' || e.key === 'F') {
+        fullscreenToggleBtn.click();
+      }
+    });
+
+    // -------------------------------------------------------------
+    // COMPUTER VISION & MEDIAPIPE GESTURE RECOGNITION
+    // -------------------------------------------------------------
+    function euclideanDist(a, b) {
+      const dx = a.x - b.x;
+      const dy = a.y - b.y;
+      return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    function processHandLandmarks(landmarks) {
+      const wrist = landmarks[0];
+      const thumbTip = landmarks[4];
+      const indexTip = landmarks[8];
+      const indexPip = landmarks[6];
+      const middleTip = landmarks[12];
+      const middlePip = landmarks[10];
+      const ringTip = landmarks[16];
+      const ringPip = landmarks[14];
+      const pinkyTip = landmarks[20];
+      const pinkyPip = landmarks[18];
+
+      const handScale = euclideanDist(wrist, landmarks[9]);
+      if (handScale < 0.05) return;
+
+      const isIndexExtended = euclideanDist(indexTip, wrist) > euclideanDist(indexPip, wrist) * 1.15;
+      const isMiddleExtended = euclideanDist(middleTip, wrist) > euclideanDist(middlePip, wrist) * 1.15;
+      const isRingExtended = euclideanDist(ringTip, wrist) > euclideanDist(ringPip, wrist) * 1.15;
+      const isPinkyExtended = euclideanDist(pinkyTip, wrist) > euclideanDist(pinkyPip, wrist) * 1.15;
+      const isThumbExtended = euclideanDist(thumbTip, wrist) > handScale * 0.85;
+
+      const fingersExtendedCount = (isIndexExtended ? 1 : 0) + 
+                                   (isMiddleExtended ? 1 : 0) + 
+                                   (isRingExtended ? 1 : 0) + 
+                                   (isPinkyExtended ? 1 : 0);
+
+      const now = performance.now();
+      const screenX = 1.0 - landmarks[9].x; 
+      const screenY = landmarks[9].y;
+
+      handCentroidBuffer.push({ x: screenX, y: screenY, t: now });
+      while (handCentroidBuffer.length > 0 && now - handCentroidBuffer[0].t > 400) {
+        handCentroidBuffer.shift();
+      }
+
+      // 1. SWIPE / WAVE RIGHT & LEFT
+      if (handCentroidBuffer.length >= 4) {
+        const oldest = handCentroidBuffer[0];
+        const newest = handCentroidBuffer[handCentroidBuffer.length - 1];
+        const dt = (newest.t - oldest.t) / 1000;
+        const dx = newest.x - oldest.x;
+        const dy = Math.abs(newest.y - oldest.y);
+
+        if (dt > 0.12 && dt < 0.45 && Math.abs(dx) > 0.16 && Math.abs(dx) > dy * 1.4) {
+          if (dx > 0) {
+            executeTouchlessAction('right', '👋 SWIPE RIGHT -> NEXT');
+            handCentroidBuffer = [];
+            palmHoldTimerStart = null;
+            return;
+          } else if (dx < 0) {
+            executeTouchlessAction('left', '👈 SWIPE LEFT -> PREV');
+            handCentroidBuffer = [];
+            palmHoldTimerStart = null;
+            return;
+          }
+        }
+      }
+
+      // 2. STATIC THUMB POINTING RIGHT
+      if (fingersExtendedCount <= 1 && (1.0 - thumbTip.x) > screenX + 0.13) {
+        executeTouchlessAction('right', '👉 THUMB RIGHT -> NEXT');
+        return;
+      }
+
+      // 3. THUMBS UP (Step Timer)
+      if (fingersExtendedCount === 0 && thumbTip.y < landmarks[2].y - 0.08 && thumbTip.y < wrist.y - 0.18) {
+        executeTouchlessAction('thumbsup', '👍 THUMBS UP -> TIMER');
+        return;
+      }
+
+      // 4. OPEN PALM (Hold 0.4s for Narration)
+      if (fingersExtendedCount >= 4 && isThumbExtended) {
+        if (!palmHoldTimerStart) {
+          palmHoldTimerStart = now;
+        } else if (now - palmHoldTimerStart > 420) {
+          executeTouchlessAction('palm', '✋ OPEN PALM -> READ/PAUSE');
+          palmHoldTimerStart = null;
+          return;
+        }
+      } else {
+        palmHoldTimerStart = null;
+      }
+    }
+
+    // Render 21 skeleton joints
+    function drawSkeleton(landmarks) {
+      landmarkCtx.clearRect(0, 0, landmarkCanvas.width, landmarkCanvas.height);
+      const w = landmarkCanvas.width;
+      const h = landmarkCanvas.height;
+
+      const connections = [
+        [0, 1], [1, 2], [2, 3], [3, 4],
+        [0, 5], [5, 6], [6, 7], [7, 8],
+        [5, 9], [9, 10], [10, 11], [11, 12],
+        [9, 13], [13, 14], [14, 15], [15, 16],
+        [13, 17], [17, 18], [18, 19], [19, 20],
+        [0, 17]
+      ];
+
+      landmarkCtx.strokeStyle = 'rgba(245, 158, 11, 0.75)';
+      landmarkCtx.lineWidth = 3;
+
+      connections.forEach(([a, b]) => {
+        const p1 = landmarks[a];
+        const p2 = landmarks[b];
+        landmarkCtx.beginPath();
+        landmarkCtx.moveTo(p1.x * w, p1.y * h);
+        landmarkCtx.lineTo(p2.x * w, p2.y * h);
+        landmarkCtx.stroke();
+      });
+
+      landmarks.forEach((p, idx) => {
+        landmarkCtx.beginPath();
+        landmarkCtx.arc(p.x * w, p.y * h, (idx % 4 === 0 && idx > 0) ? 6 : 4, 0, 2 * Math.PI);
+        landmarkCtx.fillStyle = (idx % 4 === 0 && idx > 0) ? '#10b981' : '#f59e0b';
+        landmarkCtx.fill();
+        landmarkCtx.strokeStyle = '#ffffff';
+        landmarkCtx.lineWidth = 1.5;
+        landmarkCtx.stroke();
+      });
+    }
+
+    // Dynamic Script Loader for MediaPipe
+    function loadAsyncScript(src, timeout = 2500) {
+      return new Promise((resolve, reject) => {
+        const s = document.createElement('script');
+        s.src = src;
+        s.crossOrigin = 'anonymous';
+        let finished = false;
+        const timer = setTimeout(() => {
+          if (!finished) { finished = true; reject(new Error('Timeout')); }
+        }, timeout);
+        s.onload = () => {
+          if (!finished) { finished = true; clearTimeout(timer); resolve(); }
+        };
+        s.onerror = () => {
+          if (!finished) { finished = true; clearTimeout(timer); reject(new Error('Error')); }
+        };
+        document.head.appendChild(s);
+      });
+    }
+
+    async function checkOrFetchMediaPipe() {
+      if (typeof Hands !== 'undefined') return true;
+      try {
+        await Promise.all([
+          loadAsyncScript('https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js', 2500),
+          loadAsyncScript('https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js', 2500)
+        ]);
+        return typeof Hands !== 'undefined';
+      } catch (e) {
+        return false;
+      }
+    }
+
+    async function startCameraVision() {
+      try {
+        statusText.textContent = 'Requesting camera...';
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: 'user' }
+        });
+        webcamMediaStream = stream;
+        webcamVideo.srcObject = stream;
+        await webcamVideo.play();
+
+        landmarkCanvas.width = webcamVideo.videoWidth || 640;
+        landmarkCanvas.height = webcamVideo.videoHeight || 480;
+
+        isCameraActive = true;
+        camBtnLabel.textContent = 'Stop Camera';
+        toggleCameraBtn.classList.remove('primary-highlight');
+        statusDot.classList.add('active');
+        statusText.textContent = 'Camera active • Loading ML...';
+
+        const mpReady = await checkOrFetchMediaPipe();
+        if (mpReady) {
+          bootMediaPipe();
+        } else {
+          bootOpticalFlow();
+        }
+      } catch (err) {
+        console.error('Camera error:', err);
+        statusText.textContent = 'Camera blocked (Simulator Ready)';
+        statusDot.style.background = '#ef4444';
+        triggerToast('📷', 'Camera access blocked. Use the gesture simulator below!');
+      }
+    }
+
+    function bootMediaPipe() {
+      try {
+        mediaPipeInstance = new Hands({
+          locateFile: (f) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${f}`
+        });
+
+        mediaPipeInstance.setOptions({
+          maxNumHands: 1,
+          modelComplexity: 1,
+          minDetectionConfidence: 0.65,
+          minTrackingConfidence: 0.6
+        });
+
+        mediaPipeInstance.onResults((res) => {
+          if (res.multiHandLandmarks && res.multiHandLandmarks.length > 0) {
+            const lms = res.multiHandLandmarks[0];
+            drawSkeleton(lms);
+            processHandLandmarks(lms);
+            if (!gestureCooldownLock) gestureText.textContent = 'Tracking Hand 🖐️';
+          } else {
+            landmarkCtx.clearRect(0, 0, landmarkCanvas.width, landmarkCanvas.height);
+            if (!gestureCooldownLock) gestureText.textContent = 'Awaiting Hand...';
+            palmHoldTimerStart = null;
+          }
+        });
+
+        if (typeof Camera !== 'undefined') {
+          cameraUtility = new Camera(webcamVideo, {
+            onFrame: async () => {
+              if (isCameraActive && mediaPipeInstance) {
+                await mediaPipeInstance.send({ image: webcamVideo });
+              }
+            },
+            width: 640,
+            height: 480
+          });
+          cameraUtility.start();
+        } else {
+          const loop = async () => {
+            if (isCameraActive && mediaPipeInstance) {
+              await mediaPipeInstance.send({ image: webcamVideo });
+              requestAnimationFrame(loop);
+            }
+          };
+          requestAnimationFrame(loop);
+        }
+
+        statusText.textContent = 'Touchless Vision Active';
+        engineLabelChip.textContent = 'MediaPipe Hands (30 FPS)';
+        triggerToast('✨', 'Kitchen Vision ready! Wave right/left to navigate.');
+      } catch (e) {
+        bootOpticalFlow();
+      }
+    }
+
+    function bootOpticalFlow() {
+      engineLabelChip.textContent = 'Optical Motion Tracker';
+      statusText.textContent = 'Motion Vision Active';
+      triggerToast('🔄', 'Using built-in motion vision engine');
+
+      const sw = 64, sh = 48;
+      const cv = document.createElement('canvas');
+      cv.width = sw; cv.height = sh;
+      const ctx = cv.getContext('2d', { willReadFrequently: true });
+      let prior = null;
+
+      function motionFrame() {
+        if (!isCameraActive) return;
+        ctx.drawImage(webcamVideo, 0, 0, sw, sh);
+        const img = ctx.getImageData(0, 0, sw, sh).data;
+        const gray = new Float32Array(sw * sh);
+        for (let i = 0; i < gray.length; i++) {
+          const idx = i * 4;
+          gray[i] = 0.299 * img[idx] + 0.587 * img[idx + 1] + 0.114 * img[idx + 2];
+        }
+
+        if (prior) {
+          let leftEnergy = 0, rightEnergy = 0;
+          const midX = sw / 2;
+          for (let y = 0; y < sh; y++) {
+            for (let x = 0; x < sw; x++) {
+              const diff = Math.abs(gray[y * sw + x] - prior[y * sw + x]);
+              if (diff > 25) {
+                if (x < midX) leftEnergy += diff;
+                else rightEnergy += diff;
+              }
+            }
+          }
+          if (leftEnergy > 2300 && leftEnergy > rightEnergy * 1.8) {
+            executeTouchlessAction('left', '👈 Wave Left Detected');
+          } else if (rightEnergy > 2300 && rightEnergy > leftEnergy * 1.8) {
+            executeTouchlessAction('right', '👉 Wave Right Detected');
+          }
+        }
+        prior = gray;
+        requestAnimationFrame(motionFrame);
+      }
+      requestAnimationFrame(motionFrame);
+    }
+
+    function stopCameraVision() {
+      if (webcamMediaStream) {
+        webcamMediaStream.getTracks().forEach(t => t.stop());
+        webcamMediaStream = null;
+      }
+      isCameraActive = false;
+      camBtnLabel.textContent = 'Start Camera';
+      toggleCameraBtn.classList.add('primary-highlight');
+      statusDot.classList.remove('active');
+      statusText.textContent = 'Camera Off (Simulator Ready)';
+      landmarkCtx.clearRect(0, 0, landmarkCanvas.width, landmarkCanvas.height);
+      gestureText.textContent = 'Camera Paused';
+    }
+
+    toggleCameraBtn.addEventListener('click', () => {
+      if (isCameraActive) stopCameraVision();
+      else startCameraVision();
+    });
+
+    // Initialize with Shorshe Ilish
+    switchRecipe(0);
+  </script>
+</body>
+</html>
